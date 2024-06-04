@@ -1,0 +1,241 @@
+﻿<Window x:Class="DiplomaProject.MainMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiplomaProject"
+        mc:Ignorable="d"
+        Title="Військовий інститут телекомунікацій та інформатизації імені Героїв Крут" Height="650" Width="1200" WindowState="Maximized">
+    <Grid x:Name="main_grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="527*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="287*"/>
+            <ColumnDefinition Width="913*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Grid.RowSpan="2" Background="#FF4949CD" />
+        <Border Grid.Column="1" Grid.RowSpan="2" Background="#FFE4FFD0"/>
+
+        <TextBlock x:Name="departmentName_textBox" 
+               Text="Відділ кадрів" 
+               FontSize="26" 
+               FontWeight="Bold"  
+               TextWrapping="Wrap"
+               VerticalAlignment="Center"
+               Margin="20,10,19,20"
+               Grid.Column="0"
+               Grid.Row="0" 
+               Foreground="White"/>
+
+
+        <StackPanel x:Name="userName_StackPanel" 
+                Orientation="Vertical" 
+                HorizontalAlignment="Right" 
+                Width="Auto"
+                Height ="Auto"
+                Grid.Column="1"
+                Grid.Row="0">
+            <TextBlock x:Name="userName_textBox"
+                   DataContext="MainMenu"
+                   Text=""
+                   FontSize="16"
+                   Foreground="IndianRed"
+                   Margin="10,10,20,3"/>
+            <TextBlock x:Name="userLogin_textBox"
+                   Text=""
+                   FontSize="12"
+                   Foreground="#FF173D89"
+                   HorizontalAlignment="Right"
+                   Margin="10,3,20,3"/>
+            <TextBlock x:Name="userOut_textBox"
+                   FontSize="10"
+                   HorizontalAlignment="Right"
+                   Margin="10,3,20,10">
+            <Hyperlink x:Name="userOut_link" 
+                       Click="userOut_link_Click">Змінити обліковий запис</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel x:Name="left_stackPanel"  
+                Orientation="Vertical" 
+                Background="#FF4949CD" 
+                Grid.Column="0"
+                Grid.Row="1">
+            <StackPanel x:Name="functions_stackPanel" Orientation="Vertical">
+                <Button x:Name="addPerson_btn" 
+                Content="Додати службовця" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5 "
+                Click="addPerson_btn_Click" Foreground="White"/>
+                <Button x:Name="editPerson_btn" 
+                Content="Редагувати службовця" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5"
+                Click="editPerson_btn_Click" Foreground="White"/>
+                <Button x:Name="removePerson_btn" 
+                Content="Видалити службовця" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5"
+                Click="removePerson_btn_Click" Foreground="White" />
+                <Button x:Name="addUnit_btn" 
+                Content="Додати підрозділ" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5"
+                Click="addUnit_btn_Click" Foreground="White"/>
+                <Button x:Name="editUnit_btn" 
+                Content="Редагувати підрозділ" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5"
+                Click="editUnit_btn_Click" Foreground="White"/>
+                <Button x:Name="removeUnit_btn" 
+                Content="Видалити підрозділ" 
+                FontSize="16"
+                HorizontalContentAlignment="Left"
+                FontWeight="DemiBold"
+                BorderThickness="0"  
+                Background="#FF4949CD"
+                Margin="20,5,20,5"
+                Click="removeUnit_btn_Click" Foreground="White" />
+            </StackPanel>
+
+            <TextBlock Text="Історія шаблонів" FontSize="24" FontWeight="DemiBold" Foreground="White" Margin="20"/>
+
+            <StackPanel x:Name="history_stackPanel" Orientation="Vertical">
+                <!--<Button x:Name="pattern1_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+            <Button x:Name="pattern2_btn"
+                    Content="Pattern2" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+            <Button x:Name="pattern3_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+            <Button x:Name="pattern4_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+            <Button x:Name="pattern5_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+        <Button x:Name="pattern6_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+        <Button x:Name="pattern7_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>
+        <Button x:Name="pattern8_btn"
+                    Content="Pattern1" FontSize="16"
+                    HorizontalContentAlignment="Left"
+                    FontWeight="DemiBold"
+                    BorderThickness="0"  
+                    Background="#FF4949CD"
+                    Margin="20,5,20,5"
+                    Click="patterns_btn_Click" Foreground="White"/>-->
+            </StackPanel>
+
+        </StackPanel>
+
+        <!--<ScrollViewer x:Name="patterns_scrollViewer" Grid.Row="1" Grid.Column="1">
+        <WrapPanel x:Name="patterns_wrapPanel" Orientation="Horizontal" Margin="20"/>
+    </ScrollViewer>-->
+
+        <!--<Grid x:Name="VacationApplication_grid" Grid.Row="1" Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56*"/>
+            <RowDefinition Height="456*"/>
+            <RowDefinition Height="39*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="226*"/>
+            <ColumnDefinition Width="231*"/>
+            <ColumnDefinition Width="457*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="pattern_header" 
+                   Text="Заява про відпустку" 
+                   FontSize="18"    
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.ColumnSpan="3" Grid.Column="0"/>
+
+        <StackPanel x:Name="patternFields_stackPanel" Orientation="Vertical" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3">
+            <Label x:Name="forWho_label" Content="На чиє ім'я" HorizontalAlignment="Center" Margin="10" FontSize="14"/>
+            <Label x:Name="Who_label" Content="Хто" HorizontalAlignment="Center" Margin="10" FontSize="14"/>
+            <Label x:Name="fromDate_label" Content="З якої дати" HorizontalAlignment="Center" Margin="10" FontSize="14"/>
+            <Label x:Name="toDate_label" Content="До якої дати" HorizontalAlignment="Center" Margin="10" FontSize="14"/>
+        </StackPanel>
+        <StackPanel x:Name="patternContent_stackPanel" Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+            <TextBox x:Name="forWho_textBox" FontSize="14" MinHeight="30" Margin="10"/>
+            <TextBox x:Name="Who_textBox" FontSize="14" MinHeight="30" Margin="10"/>
+            <DatePicker x:Name="fromDate_datePicker" Margin="12"/>
+            <DatePicker x:Name="toDate_datePicker" Margin="12"/>
+        </StackPanel>
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Width="1" Margin="0,0,0,10" Background="Black"/>
+        <Button x:Name="print_btn" Content="Роздрукувати" Margin="10" HorizontalAlignment="Left" Padding="5,0,5,0" Click="print_btn_Click" Grid.Column="1" Grid.Row="2"/>
+        <Button x:Name="save_btn" Content="Зберегти"  Margin="10" HorizontalAlignment="Right" Padding="5,0,5,0" Click="save_btn_Click" Grid.Column="1" Grid.Row="2"/>
+        <Button x:Name="back_btn" Content="Назад"  Margin="10, 15, 10, 15" HorizontalAlignment="Left" Padding="5,0,5,0" Click="" Grid.Column="0" Grid.Row="0"/>
+        <Image x:Name="pattern_image" 
+               Source="E:\MITI\Lessons\OOP\Starodubtsev.CourseWork2\Starodubtsev.CourseWork2\Images\VacationAppl.jpg"
+               Margin="20,10,0,10"
+               Grid.Column="2" 
+               Grid.Row="1" Grid.RowSpan="2"/>
+    </Grid>-->
+
+    </Grid>
+</Window>
