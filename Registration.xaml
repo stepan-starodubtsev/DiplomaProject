@@ -29,36 +29,19 @@
                Height="27" 
                Width="192" 
                Margin="10"/>
-        <StackPanel Margin="3,128,168,0" Grid.RowSpan="2" Grid.ColumnSpan="2" Grid.Column="1">
-            <Label Content="Логін" Margin="23,20,10,5" FontSize="16"/>
-            <Label Content="Пароль" Margin="23,0,10,10" FontSize="16"/>
-            <Label Content="Службовець" Margin="23,0,10,10" FontSize="16"/>
+        <StackPanel Margin="79,128,53,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+            <Label Content="Email" Margin="23,20,10,5" FontSize="16"/>
+            <Label Content="Пароль" Margin="23,0,10,10" FontSize="16" Width="77"/>
+            <Label Content="Ваш ПІБ" Margin="23,0,10,10" FontSize="16" Width="78"/>
         </StackPanel>
         <StackPanel 
-        Grid.Column="1" Margin="134,128,0,0" Grid.RowSpan="2" >
+        Grid.Column="1" Margin="52,128,94,0" Grid.RowSpan="2" Grid.ColumnSpan="3" >
             <TextBox x:Name="login_textBox" Margin="10,30,10,10"/>
             <PasswordBox x:Name="pass_passwordBox" Margin="10"/>
-            <ComboBox x:Name="person_comboBox"
-                  HorizontalContentAlignment="Left"
-                  IsEditable="True" 
-                  TextBoxBase.TextChanged="person_comboBox_TextChanged"
-                  IsTextSearchEnabled="True" 
-                  IsTextSearchCaseSensitive="True"
-                  Padding="80, 0, 80, 0"
-                  Margin="10"/>
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="next_btn"
-                    Content="Далі"
-                    HorizontalAlignment="Right"
-                    Padding="5,0,5,0"
-                    Margin="10,10,60,10"
-                    Click="next_btn_Click"/>
-                <Button x:Name="reg_btn"
-                    Content="Зареєструвати"
-                    HorizontalAlignment="Right"
-                    Margin="10,10,10,10"
-                    Click="reg_btn_Click"/>
-            </StackPanel>
+            <TextBox x:Name="fullname_textBox" Margin="10"/>
+            <Button x:Name="reg_btn"
+                    Content="Зареєструватися"
+                    Click="reg_btn_Click" Width="185"/>
         </StackPanel>
     </Grid>
 </Window>

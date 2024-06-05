@@ -4,6 +4,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using DiplomaProject.Entities;
+using Microsoft.Office.Interop.Word;
 
 namespace DiplomaProject.Services
 {
@@ -14,13 +17,15 @@ namespace DiplomaProject.Services
         public static Person GetPersonByFullname(String fullname)
         {
             Person person = null;
-            String query = $"SELECT * FROM person WHERE fullname LIKE N'{fullname}%'";
+            String query = $"SELECT * FROM person WHERE person_fullname LIKE N'{fullname}%'";
             connection.Open();
             var command = new SqlCommand(query, connection);
             using (var reader = command.ExecuteReader())
             {
                 if (reader.HasRows)
                 {
+                    while (reader.Read())
+                    {
                     int id = Convert.ToInt32(reader[0]);
                     string sex = reader[2].ToString();
                     DateTime birth = (DateTime)reader[3];
@@ -31,68 +36,55 @@ namespace DiplomaProject.Services
                     string passport = reader[7].ToString();
                     string idcard = reader[8].ToString();
                     string phone = reader[9].ToString();
-                    int? idGroup = null;
-                    if (reader[10].ToString() != "NULL")
-                    {
-                        idGroup = Convert.ToInt32(reader[10]);
+                    string unit = reader[10].ToString();
+                    person = new Person(id, fullname, sex, birth, age, rank, post, adress, passport, idcard, phone, unit);
                     }
-
-                    int? idStaffDep = null;
-                    if (reader[11].ToString() != "NULL")
-                    {
-                        idStaffDep = Convert.ToInt32(reader[11]);
-                    }
-                    string login = reader[12].ToString();
-                    string password = reader[13].ToString();
-                    person = new Person(id, fullname, sex, birth, age, rank, post, adress, passport, idcard, phone, idGroup, idStaffDep);
                 }
+                else
+                {
+                    MessageBox.Show("Працівника не знайдено");
+                }
+                connection.Close();
                 return person;
             }
         }
 
-        private List<Person> GetAllPersons()
+        public static List<Person> GetAllPersons()
         {
             List<Person> people = new List<Person>();
+            List<Person> peopleTmp = new List<Person>();
             connection.Open();
             String query = $"SELECT * FROM person";
             var command = new SqlCommand(query, connection);
             using (var reader = command.ExecuteReader())
             {
-                while (reader.Read())
-                {
-                    int id = Convert.ToInt32(reader[0]);
-                    string fullname = reader[1].ToString();
-                    string sex = reader[2].ToString();
-                    DateTime birth = (DateTime)reader[3];
-                    int age = DateTime.Now.Year - birth.Year;
-                    string rank = reader[4].ToString();
-                    string post = reader[5].ToString();
-                    string adress = reader[6].ToString();
-                    string passport = reader[7].ToString();
-                    string idcard = reader[8].ToString();
-                    string phone = reader[9].ToString();
-                    int? idGroup = null;
-                    if (reader[10].ToString() != "")
+                if (reader.HasRows) {
+                    while (reader.Read())
                     {
-                        idGroup = Convert.ToInt32(reader[10]);
+                        int id = Convert.ToInt32(reader[0]);
+                        string fullname = reader[1].ToString();
+                        string sex = reader[2].ToString();
+                        DateTime birth = (DateTime)reader[3];
+                        int age = DateTime.Now.Year - birth.Year;
+                        string rank = reader[4].ToString();
+                        string post = reader[5].ToString();
+                        string adress = reader[6].ToString();
+                        string passport = reader[7].ToString();
+                        string idcard = reader[8].ToString();
+                        string phone = reader[9].ToString();
+                        string unit = reader[10].ToString();
+                        people.Add(new Person(id, fullname, sex, birth, age, rank, post, adress, passport, idcard, phone, unit));
                     }
-
-                    int? idStaffDep = null;
-                    if (reader[11].ToString() != "")
+                    connection.Close();
+                    var q = people.OrderBy(x => x.Fullname.Substring(0, 1));
+                    foreach (var person in q)
                     {
-                        idStaffDep = Convert.ToInt32(reader[11]);
+                        peopleTmp.Add(person);
                     }
-                    people.Add(new Person(id, fullname, sex, birth, age, rank, post, adress, passport, idcard, phone, idGroup, idStaffDep));
-                }
-                connection.Close();
-                List<Person> peopleTmp = new List<Person>();
-                var q = people.OrderBy(x => x.Fullname.Substring(0, 1));
-                foreach (var person in q)
-                {
-                    peopleTmp.Add(person);
-                }
-                return peopleTmp;
+                }                
             }
+            connection.Close();
+            return peopleTmp;
         }
     }
 }

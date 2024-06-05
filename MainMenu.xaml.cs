@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DiplomaProject.Entities;
 
 namespace DiplomaProject
 {
@@ -24,12 +25,12 @@ namespace DiplomaProject
     {
         private ObservableCollection<Pattern> _patterns = new ObservableCollection<Pattern>();
         private UIElement _iElement;
-        private Person _currentUser = new Person();
+        private User _currentUser;
         internal ObservableCollection<Pattern> Patterns { get => _patterns; set => _patterns = value; }
         public UIElement IElement { get => _iElement; set => _iElement = value; }
-        public Person CurrentUser { get => _currentUser; set => _currentUser = value; }
+        public User CurrentUser { get => _currentUser; set => _currentUser = value; }
         public MainMenu() { }
-        public MainMenu(Person user)
+        public MainMenu(User user)
         {
             InitializeComponent();
             CurrentUser = user;

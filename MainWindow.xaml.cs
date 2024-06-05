@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DiplomaProject.Entities;
+using DiplomaProject.Services;
 
 namespace DiplomaProject
 {
@@ -21,82 +23,46 @@ namespace DiplomaProject
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Person _currentUser;
-        public Person CurrentUser { get => _currentUser; set => _currentUser = value; }
+        private User _currentUser;
+        internal User CurrentUser { get => _currentUser; set => _currentUser = value; }
 
         public MainWindow()
         {
             InitializeComponent();
+            if (UserDBService.GetAllUsers().Count == 0)
+            {
+                Registration registration = new Registration();
+                registration.CurrentUser = this.CurrentUser;
+                registration.Show();
+                this.Close();
+            }
         }
-
         private void login_btn_Click(object sender, RoutedEventArgs e)
         {
             string loginUser = login_textBox.Text;
             string passwordUser = pass_passwordBox.Password;
-            string connStr = "Data Source=localhost;Initial Catalog=Staff;Integrated Security=True;";
-            SqlConnection connection = new SqlConnection(connStr);
-            connection.Open();
-            string query =
-                $"SELECT * FROM person WHERE login LIKE '{loginUser}' AND password LIKE '{passwordUser}'";
-            using (var command = new SqlCommand(query, connection))
+            CurrentUser = UserDBService.GetUserByLogin(loginUser);
+            if (CurrentUser != null)
             {
-                using (var reader = command.ExecuteReader())
+                if (CurrentUser.Password == passwordUser)
                 {
-                    if (reader.HasRows)
-                    {
-
-                        while (reader.Read())
-                        {
-                            int id = Convert.ToInt32(reader[0]);
-                            string fullname = reader[1].ToString();
-                            string sex = reader[2].ToString();
-                            DateTime birth = (DateTime)reader[3];
-                            int age = DateTime.Now.Year - birth.Year;
-                            string rank = reader[4].ToString();
-                            string post = reader[5].ToString();
-                            string adress = reader[6].ToString();
-                            string passport = reader[7].ToString();
-                            string idcard = reader[8].ToString();
-                            string phone = reader[9].ToString();
-                            int? idGroup = null;
-                            if (reader[10].ToString() != "")
-                            {
-                                idGroup = Convert.ToInt32(reader[10]);
-                            }
-
-                            int? idStaffDep = null;
-                            if (reader[11].ToString() != "")
-                            {
-                                idStaffDep = Convert.ToInt32(reader[11]);
-                            }
-                            string login = reader[12].ToString();
-                            string password = reader[13].ToString();
-                            CurrentUser = new Person(id, fullname, sex, birth, age, rank,
-                                post, adress, passport, idcard, phone, idGroup, idStaffDep, login, password);
-                        }
-                        if (loginUser.Equals("admin"))
-                        {
-                            Registration registration = new Registration();
-                            registration.CurrentUser = this.CurrentUser;
-                            registration.Show();
-                            this.Close();
-                        }
-                        else
-                        {
-                            MainMenu mainMenu = new MainMenu(CurrentUser);
-                            mainMenu.Show();
-                            this.Close();
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Неправильний логін або пароль!");
-                        login_textBox.Clear();
-                        pass_passwordBox.Clear();
-                    }
+                    MainMenu mainMenu = new MainMenu(CurrentUser);
+                    mainMenu.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неправильний логін або пароль!");
+                    login_textBox.Clear();
+                    pass_passwordBox.Clear();
                 }
             }
-            connection.Close();
+            else
+            {
+                MessageBox.Show("Неправильний логін або пароль!");
+                login_textBox.Clear();
+                pass_passwordBox.Clear();
+            }
         }
     }
 }

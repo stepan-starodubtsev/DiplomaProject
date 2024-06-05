@@ -39,11 +39,11 @@
                 Grid.Column="1"
                 Grid.Row="0">
             <TextBlock x:Name="userName_textBox"
-                   DataContext="MainMenu"
-                   Text=""
-                   FontSize="16"
-                   Foreground="IndianRed"
-                   Margin="10,10,20,3"/>
+             DataContext="MainMenu"
+             Text=""
+             FontSize="16"
+             Foreground="IndianRed"
+             Margin="10,10,20,3"/>
             <TextBlock x:Name="userLogin_textBox"
                    Text=""
                    FontSize="12"
@@ -55,7 +55,7 @@
                    HorizontalAlignment="Right"
                    Margin="10,3,20,10">
             <Hyperlink x:Name="userOut_link" 
-                       Click="userOut_link_Click">Змінити обліковий запис</Hyperlink>
+                       Click="userOut_link_Click">Вийти з облікового запису</Hyperlink>
             </TextBlock>
         </StackPanel>
         <StackPanel x:Name="left_stackPanel"  

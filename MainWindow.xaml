@@ -30,7 +30,7 @@
                Width="154"/>
         <StackPanel 
         Grid.Column="1" Margin="0,128,0,0" Grid.RowSpan="2">
-            <Label Content="Логін" Margin="23,20,10,5" FontSize="16"/>
+            <Label Content="Email" Margin="23,20,10,5" FontSize="16"/>
             <Label Content="Пароль" Margin="23,5,10,10" FontSize="16"/>
         </StackPanel>
         <StackPanel 

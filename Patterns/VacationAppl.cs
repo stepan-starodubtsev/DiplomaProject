@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiplomaProject.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using Microsoft.Win32;
 using System.Data.SqlClient;
 using System.Windows.Data;
 using System.Xml.Serialization;
+using DiplomaProject.Entities;
 
 namespace DiplomaProject
 {
@@ -161,7 +163,7 @@ namespace DiplomaProject
             forWhoComboBox.FontSize = 14;
             forWhoComboBox.IsTextSearchCaseSensitive = true;
             forWhoComboBox.IsEditable = true;
-            _persons = GetPersons($"SELECT * FROM person");
+            _persons = PersonDBService.GetAllPersons();
             forWhoComboBox.ItemsSource = LoadComboItems(_persons);
             forWhoComboBox.PreviewTextInput += new TextCompositionEventHandler(withoutNumbers_PreviewTextInput);
             _forWhoComboBox = forWhoComboBox;
@@ -362,15 +364,15 @@ namespace DiplomaProject
             
             var document = application.Documents.Open(tempFileName);
 
-            List<Person> boss = GetPersons($"SELECT * FROM person WHERE fullname LIKE N'{_forWhoComboBox.Text}%'");
-            string tmpText = boss[0].Post + "\n" + boss[0].Rank;
+            Person boss = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
+            string tmpText = boss.Post + "\n" + boss.Rank;
             FixTag($"<!{Tags[0]}>", tmpText, document);
-            FixTag($"<!{Tags[1]}>", boss[0].Fullname, document);
+            FixTag($"<!{Tags[1]}>", boss.Fullname, document);
 
-            List<Person> person = GetPersons($"SELECT * FROM person WHERE fullname LIKE N'{_whoComboBox.Text}%'");
-            tmpText = boss[0].Post + "\n" + boss[0].Rank;
+            Person person = PersonDBService.GetPersonByFullname(_whoComboBox.Text);
+            tmpText = boss.Post + "\n" + boss.Rank;
             FixTag($"<!{Tags[2]}>", tmpText, document);
-            FixTag($"<!{Tags[3]}>", person[0].Fullname, document);
+            FixTag($"<!{Tags[3]}>", person.Fullname, document);
 
             FixTag($"<!{Tags[4]}>", days.ToString(), document);
             FixTag($"<!{Tags[5]}>", from, document);
@@ -434,15 +436,15 @@ namespace DiplomaProject
             File.Copy(originalFileName, tempFileName);
             var document = application.Documents.Open(tempFileName);
 
-            List<Person> boss = GetPersons($"SELECT * FROM person WHERE fullname LIKE '{_forWhoComboBox.Text}%'");
-            string tmpText = boss[0].Post + "\n" + boss[0].Rank;
+            Person boss = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
+            string tmpText = boss.Post + "\n" + boss.Rank;
             FixTag($"<!{Tags[0]}>", tmpText, document);
-            FixTag($"<!{Tags[1]}>", boss[0].Fullname, document);
+            FixTag($"<!{Tags[1]}>", boss.Fullname, document);
 
-            List<Person> person = GetPersons($"SELECT * FROM person WHERE fullname LIKE '{_whoComboBox.Text}%'");
-            tmpText = person[0].Post + "\n" + person[0].Rank;
+            Person person = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
+            tmpText = person.Post + "\n" + person.Rank;
             FixTag($"<!{Tags[2]}>", tmpText, document);
-            FixTag($"<!{Tags[3]}>", person[0].Fullname, document);
+            FixTag($"<!{Tags[3]}>", person.Fullname, document);
 
             FixTag($"<!{Tags[4]}>", days.ToString(), document);
             FixTag($"<!{Tags[5]}>", from, document);
@@ -467,56 +469,6 @@ namespace DiplomaProject
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-            }
-        }
-        /// <summary>
-        /// Отримує список усіх людей з таблиці
-        /// </summary>
-        /// <param name="query">SQL запит</param>
-        /// <param name="text">Необхідний текст при вибірці</param>
-        /// <returns>Повертає список людей</returns>
-        private List<Person> GetPersons(string query, string text = null)
-        {
-            List<Person> people = new List<Person>();
-            var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Staff;Integrated Security=True;");
-            connection.Open();
-            var command = new SqlCommand(query, connection);
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    int id = Convert.ToInt32(reader[0]);
-                    string fullname = reader[1].ToString();
-                    string sex = reader[2].ToString();
-                    DateTime birth = (DateTime)reader[3];
-                    int age = DateTime.Now.Year - birth.Year;
-                    string rank = reader[4].ToString();
-                    string post = reader[5].ToString();
-                    string adress = reader[6].ToString();
-                    string passport = reader[7].ToString();
-                    string idcard = reader[8].ToString();
-                    string phone = reader[9].ToString();
-                    int? idGroup = null;
-                    if (reader[10].ToString() != "")
-                    {
-                        idGroup = Convert.ToInt32(reader[10]);
-                    }
-
-                    int? idStaffDep = null;
-                    if (reader[11].ToString() != "")
-                    {
-                        idStaffDep = Convert.ToInt32(reader[11]);
-                    }
-                    people.Add(new Person(id, fullname, sex, birth, age, rank, post, adress, passport, idcard, phone, idGroup, idStaffDep));
-                }
-                connection.Close();
-                List<Person> peopleTmp = new List<Person>();
-                var q = people.OrderBy(x=> x.Fullname.Substring(0, 1));
-                foreach (var person in q)
-                {
-                    peopleTmp.Add(person);
-                }
-                return peopleTmp;
             }
         }
 
