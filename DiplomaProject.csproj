@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Patterns\PatternsWord\ExcursionAppl.docx" />
+    <None Remove="Patterns\PatternsWord\TransferPattern.docx" />
     <None Remove="Patterns\PatternsWord\VacationAppl.docx" />
   </ItemGroup>
 
@@ -29,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Patterns\PatternsWord\ExcursionAppl.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Patterns\PatternsWord\TransferPattern.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Patterns\PatternsWord\VacationAppl.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

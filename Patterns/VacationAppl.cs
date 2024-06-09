@@ -18,6 +18,7 @@ using System.Data.SqlClient;
 using System.Windows.Data;
 using System.Xml.Serialization;
 using DiplomaProject.Entities;
+using Microsoft.Office.Interop.Word;
 
 namespace DiplomaProject
 {
@@ -29,10 +30,10 @@ namespace DiplomaProject
         }
         public VacationAppl(MainMenu owner) : base(owner)
         { 
-            IconName = "VacationApplication";
-            IconPath = @"D:\Lessons\OOP\DiplomaProject\Images\VacationAppl.jpg";
+            FileName = "VacationAppl";
+            IconPath = $@"D:\Lessons\OOP\DiplomaProject\Images\{FileName}.jpg";
             PatternName = "Заява про відпустку";
-            Sourse = @"Patterns\PatternsWord/VacationAppl.docx";
+            Sourse = $@"Patterns\PatternsWord\{FileName}.docx";
             Tags.Add("bossPost");
             Tags.Add("boss");
             Tags.Add("personPost");
@@ -236,7 +237,7 @@ namespace DiplomaProject
             BitmapImage bitmap = new BitmapImage(new Uri(IconPath));
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
             Image patternImage = new Image();
-            patternImage.Name = $"{IconName}_image";
+            patternImage.Name = $"{FileName}_image";
             patternImage.Source = bitmap;
             patternImage.Margin = new Thickness(20, 10, 0, 10);
             Grid.SetColumn(patternImage, 2);
@@ -308,28 +309,9 @@ namespace DiplomaProject
             }
             return tmp;
         }
-        /// <summary>
-        /// Заміняє тег на потрібну строку
-        /// </summary>
-        /// <param name="tag">Потрібний тег</param>
-        /// <param name="text">Текст, на який замінять тег</param>
-        /// <param name="document">об'єкт типу Word.Document</param>
-        public override void FixTag(string tag, string text, Word.Document document)
-        {
-            var range = document.Content;
-            range.Find.ClearFormatting();
-            range.Find.Execute(FindText: tag, ReplaceWith: text);
-        }
 
-
-        public override void PrintDocument()
+        public override void FixDocumentTags(Document document)
         {
-            var application = new Word.Application();
-            application.Visible = false;
-            var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var originalFileName = Path.Combine(directory, "Patterns\\PatternsWord\\VacationAppl.docx");
-            var tempFileName = Path.Combine(directory, "Patterns\\PatternsWord\\VacationApplTemp.docx");
-            File.Copy(originalFileName, tempFileName);
             DateTime fromDate = new DateTime();
             DateTime toDate = new DateTime();
             try
@@ -361,8 +343,6 @@ namespace DiplomaProject
             }
             int days = (toDate - fromDate).Days;
             string from = $"{fromDate.Day}.{fromDate.Month}.{fromDate.Year}";
-            
-            var document = application.Documents.Open(tempFileName);
 
             Person boss = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
             string tmpText = boss.Post + "\n" + boss.Rank;
@@ -370,153 +350,12 @@ namespace DiplomaProject
             FixTag($"<!{Tags[1]}>", boss.Fullname, document);
 
             Person person = PersonDBService.GetPersonByFullname(_whoComboBox.Text);
-            tmpText = boss.Post + "\n" + boss.Rank;
-            FixTag($"<!{Tags[2]}>", tmpText, document);
-            FixTag($"<!{Tags[3]}>", person.Fullname, document);
-
-            FixTag($"<!{Tags[4]}>", days.ToString(), document);
-            FixTag($"<!{Tags[5]}>", from, document);
-
-            try
-            {
-                application.ActiveDocument.PrintOut(true, false, Word.WdPrintOutRange.wdPrintAllDocument,
-                                                    Item: Word.WdPrintOutItem.wdPrintDocumentContent, Copies: "1", Pages: "",
-                                                    PageType: Word.WdPrintOutPages.wdPrintAllPages, PrintToFile: false, Collate: true,
-                                                    ManualDuplexPrint: false);
-                CreateLog();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            application.ActiveDocument.Close();
-            File.Delete(tempFileName);
-            application.Quit();
-        }
-
-        public override void SaveDocument()
-        {
-            DateTime fromDate = new DateTime();
-            DateTime toDate = new DateTime();
-            try
-            {
-                fromDate = (DateTime)_fromDatePicker.SelectedDate;
-            }
-            catch (FormatException)
-            {
-                _fromDatePicker.Text = "";
-                Console.WriteLine("Неправильний формат дати у полі 'З якої дати'!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Виявлено помилку!\n{e.Message}");
-            }
-
-            try
-            {
-                toDate = (DateTime)_toDatePicker.SelectedDate;
-            }
-            catch (FormatException)
-            {
-                _fromDatePicker.Text = "";
-                Console.WriteLine("Неправильний формат дати у полі 'До якої дати'!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Виявлено помилку!\n{e.Message}");
-            }
-            int days = (toDate - fromDate).Days;
-            string from = $"{fromDate.Day}.{fromDate.Month}.{fromDate.Year}";
-
-            Word.Application application = new Word.Application();
-            application.Visible = false;
-            var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var originalFileName = Path.Combine(directory, "Patterns\\PatternsWord\\VacationAppl.docx");
-            var tempFileName = Path.Combine(directory, "Patterns\\PatternsWord\\VacationApplTemp.docx");
-            File.Copy(originalFileName, tempFileName);
-            var document = application.Documents.Open(tempFileName);
-
-            Person boss = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
-            string tmpText = boss.Post + "\n" + boss.Rank;
-            FixTag($"<!{Tags[0]}>", tmpText, document);
-            FixTag($"<!{Tags[1]}>", boss.Fullname, document);
-
-            Person person = PersonDBService.GetPersonByFullname(_forWhoComboBox.Text);
             tmpText = person.Post + "\n" + person.Rank;
             FixTag($"<!{Tags[2]}>", tmpText, document);
             FixTag($"<!{Tags[3]}>", person.Fullname, document);
 
             FixTag($"<!{Tags[4]}>", days.ToString(), document);
             FixTag($"<!{Tags[5]}>", from, document);
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveFileDialog.Filter = "Word Document(.docx)|*.docx";
-            if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length > 0)
-            {
-                document.SaveAs2(saveFileDialog.FileName);
-                CreateLog();
-            }
-            else
-            {
-                MessageBox.Show("Документ не був створений, спробуйте ще раз");
-            }
-            try
-            {
-                document.Close();
-                File.Delete(tempFileName);
-                application.Quit();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        public override void CreateLog()
-        {
-            var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var fileName = Path.Combine(directory, "Patterns\\Patterns.log");
-            List<string> logsTnp = new List<string>();
-            List<string> logs = new List<string>();
-            using (var filestream = new FileStream(fileName, FileMode.OpenOrCreate))
-            {
-                using (var reader = new StreamReader(filestream))
-                {
-                    string tmp;
-                    
-                    while ((tmp = reader.ReadLine()) != null)
-                    {
-                        logsTnp.Add(tmp);
-                    }
-                    
-                }
-            }
-            if (logsTnp.Count > 12)
-            {
-                for (int i = logsTnp.Count - 12; i < logsTnp.Count; i++)
-                {
-                    logs.Add(logsTnp[i]);
-                }
-                File.Delete(fileName);
-                using (var filestream = new FileStream(fileName, FileMode.Append))
-                {
-                    using (var writer = new StreamWriter(filestream))
-                    {
-                        foreach (var log in logs)
-                        {
-                            writer.WriteLine(log);
-                        }
-                    
-                    }
-                }
-            }
-            using (var filestream = new FileStream(fileName, FileMode.Append))
-            {
-                using (var writer = new StreamWriter(filestream))
-                {
-                    writer.WriteLine(IconName);
-                }
-            }
         }
         #endregion
     }

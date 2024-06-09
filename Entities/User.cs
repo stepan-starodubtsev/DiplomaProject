@@ -13,6 +13,10 @@ namespace DiplomaProject
         private string _password;
         private string _fullname;
 
+        public User()
+        {
+
+        }
         public User(int id,
                     string login,
                     string password,

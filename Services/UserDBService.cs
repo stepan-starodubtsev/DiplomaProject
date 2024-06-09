@@ -16,9 +16,10 @@ namespace DiplomaProject.Services
         public static User GetUserByLogin(String login)
         {
             User user = null;
-            String query = $"SELECT * FROM users WHERE user_login LIKE N'{login}%'";
+            String query = $"SELECT * FROM users WHERE user_login = @login";
             connection.Open();
             var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@login", login);
             using (var reader = command.ExecuteReader())
             {
                 if (reader.HasRows)
@@ -58,21 +59,22 @@ namespace DiplomaProject.Services
             return users;
         }
 
-        public static User CreateUser(string login, string password, string fullname)
+        public static User CreateUser(User user)
         {
-            if (GetUserByLogin(login) == null)
+            if (GetUserByLogin(user.Login) == null)
             {
                 connection.Open();
                 string query =  $"INSERT INTO users (user_fullname, user_login, user_password) VALUES (@fullname, @login, @password)";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@fullname", fullname);
-                    command.Parameters.AddWithValue("@login", login);
-                    command.Parameters.AddWithValue("@password", password);
+                    command.Parameters.AddWithValue("@fullname", user.Fullname);
+                    command.Parameters.AddWithValue("@login", user.Login);
+                    command.Parameters.AddWithValue("@password", user.Password);
                     command.ExecuteNonQuery();
                     connection.Close();
-                    return GetUserByLogin(login);
+                    return GetUserByLogin(user.Login);
                 }
+                return user;
             } 
             return null;
         }

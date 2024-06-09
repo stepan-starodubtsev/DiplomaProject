@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DiplomaProject.Entities;
+using DiplomaProject.Patterns;
 
 namespace DiplomaProject
 {
@@ -26,7 +27,7 @@ namespace DiplomaProject
         private ObservableCollection<Pattern> _patterns = new ObservableCollection<Pattern>();
         private UIElement _iElement;
         private User _currentUser;
-        internal ObservableCollection<Pattern> Patterns { get => _patterns; set => _patterns = value; }
+        public ObservableCollection<Pattern> Patterns { get => _patterns; set => _patterns = value; }
         public UIElement IElement { get => _iElement; set => _iElement = value; }
         public User CurrentUser { get => _currentUser; set => _currentUser = value; }
         public MainMenu() { }
@@ -36,7 +37,8 @@ namespace DiplomaProject
             CurrentUser = user;
             userName_textBox.Text = CurrentUser.Fullname;
             userLogin_textBox.Text = CurrentUser.Login;
-            _patterns.Add(new VacationAppl(this));
+            Patterns.Add(new VacationAppl(this));
+            Patterns.Add(new TransferPattern(this));
             AddPatternsToListBox();
             LoadHistory();
         }
@@ -44,35 +46,6 @@ namespace DiplomaProject
 
 
         #region ControlMethods
-        private void addPerson_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void editPerson_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void removePerson_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void addUnit_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void editUnit_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void removeUnit_btn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void patterns_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -90,6 +63,13 @@ namespace DiplomaProject
         {
             LoadPattern(e);
         }
+
+        private void persons_btn_Click(object sender, RoutedEventArgs e)
+        {
+            PersonsPage personsPage = new PersonsPage(CurrentUser);
+            personsPage.Show();
+            this.Close();
+        }
         #endregion
 
         #region MainMetods
@@ -101,7 +81,7 @@ namespace DiplomaProject
         {
             foreach (var pattern in Patterns)
             {
-                if (pattern.IconName.Equals((e.Source as Button).Name))
+                if (pattern.FileName.Equals((e.Source as Button).Name))
                 {
                     Grid patternGrid = pattern.PlaceElements();
                     Grid.SetColumn(patternGrid, 1);
@@ -127,23 +107,23 @@ namespace DiplomaProject
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 Image image = new Image();
                 image.Source = bitmap;
-                image.Name = $"{pattern.IconName}_image";
+                image.Name = $"{pattern.FileName}_image";
 
                 Button button = new Button();
-                button.Name = $"{pattern.IconName}";
+                button.Name = $"{pattern.FileName}";
                 button.Height = 195;
                 button.Width = 125;
                 button.Click += new RoutedEventHandler(iconButton_Click);
                 button.Content = image;
 
                 TextBlock textBlock = new TextBlock();
-                textBlock.Name = $"{pattern.IconName}_textBox";
+                textBlock.Name = $"{pattern.FileName}_textBox";
                 textBlock.Text = pattern.PatternName;
                 textBlock.Margin = new Thickness(5);
                 textBlock.FontSize = 14;
 
                 StackPanel stackPanel = new StackPanel();
-                stackPanel.Name = $"{pattern.IconName}_stackPanel";
+                stackPanel.Name = $"{pattern.FileName}_stackPanel";
                 stackPanel.Children.Add(button);
                 stackPanel.Children.Add(textBlock);
 
@@ -180,51 +160,39 @@ namespace DiplomaProject
                     using (var reader = new StreamReader(filestream))
                     {
                         VacationAppl vacation = new VacationAppl(this);
-                        ExcursionAppl excursion = new ExcursionAppl();
+                        TransferPattern transferPattern = new TransferPattern();
                         string tmp;
                         while ((tmp = reader.ReadLine()) != null)
                         {
-                            if (tmp.Equals("VacationApplication"))
-                            {
-                                Button button = new Button();
-                                button.Name = vacation.IconName;
-                                button.Content = vacation.PatternName;
-                                button.HorizontalContentAlignment = HorizontalAlignment.Left;
-                                button.FontSize = 16;
-                                button.FontWeight = FontWeights.DemiBold;
-                                button.BorderThickness = new Thickness(0);
-                                Color color = new Color();
-                                color.R = 73;
-                                color.G = 73;
-                                color.B = 205;
-                                color.A = 100;
-                                button.Background = new SolidColorBrush(color);
-                                button.Foreground = Brushes.White;
-                                button.Margin = new Thickness(20, 5, 20, 5);
-                                button.Click += new RoutedEventHandler(patterns_btn_Click);
+                            Button button = new Button();
 
-                                history_stackPanel.Children.Add(button);
-                            }
-                            else if (tmp.Equals("ExcursionApplication"))
+                            switch (tmp)
                             {
-                                Button button = new Button();
-                                button.Name = excursion.IconName;
-                                button.Content = excursion.Name;
-                                button.HorizontalAlignment = HorizontalAlignment.Center;
-                                button.FontWeight = FontWeights.DemiBold;
-                                button.BorderThickness = new Thickness(0);
-                                Color color = new Color();
-                                color.R = 73;
-                                color.G = 73;
-                                color.B = 205;
-                                color.A = 100;
-                                button.Background = new SolidColorBrush(color);
-                                button.Foreground = Brushes.White;
-                                button.Margin = new Thickness(20, 5, 20, 5);
-                                button.Click += new RoutedEventHandler(patterns_btn_Click);
-
-                                history_stackPanel.Children.Add(button);
+                                case "VacationApplication":
+                                    button.Name = vacation.FileName;
+                                    button.Content = vacation.PatternName;
+                                    break;
+                                case "TransferPattern":
+                                    button.Name = transferPattern.FileName;
+                                    button.Content = transferPattern.PatternName;
+                                    break;
                             }
+
+                            button.HorizontalContentAlignment = HorizontalAlignment.Left;
+                            button.FontSize = 16;
+                            button.FontWeight = FontWeights.DemiBold;
+                            button.BorderThickness = new Thickness(0);
+                            Color color = new Color();
+                            color.R = 73;
+                            color.G = 73;
+                            color.B = 205;
+                            color.A = 100;
+                            button.Background = new SolidColorBrush(color);
+                            button.Foreground = Brushes.White;
+                            button.Margin = new Thickness(20, 5, 20, 5);
+                            button.Click += new RoutedEventHandler(patterns_btn_Click);
+
+                            history_stackPanel.Children.Add(button);
                         }
                     }
                 }

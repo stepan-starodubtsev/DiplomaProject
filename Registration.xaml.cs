@@ -34,11 +34,12 @@ namespace DiplomaProject
        
         private void reg_btn_Click(object sender, RoutedEventArgs e)
         {
-            string login = login_textBox.Text;
-            string password = pass_passwordBox.Password;
-            string fullname = fullname_textBox.Text;
+            User user = new User();
+            user.Login = login_textBox.Text;
+            user.Password = pass_passwordBox.Password;
+            user.Fullname = fullname_textBox.Text;
 
-            CurrentUser = UserDBService.CreateUser(login, password, fullname);
+            CurrentUser = UserDBService.CreateUser(user);
             if (CurrentUser != null) {
                 MainMenu mainMenu = new MainMenu(CurrentUser);
                 mainMenu.Show();
