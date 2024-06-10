@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Patterns\PatternsWord\MoneyHelpPattern.docx" />
     <None Remove="Patterns\PatternsWord\TransferPattern.docx" />
     <None Remove="Patterns\PatternsWord\VacationAppl.docx" />
   </ItemGroup>
@@ -29,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Patterns\PatternsWord\MoneyHelpPattern.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Patterns\PatternsWord\TransferPattern.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

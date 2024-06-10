@@ -177,6 +177,16 @@ namespace DiplomaProject
             document.Close();
             File.Delete(tempFileName);
             application.Quit();
+
+            if (newFileName != null)
+            {
+                var newApplication = new Word.Application
+                {
+                    Visible = true
+                };
+
+                newApplication.Documents.Open(newFileName);
+            }
         }
     }
 }

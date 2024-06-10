@@ -39,7 +39,10 @@ namespace DiplomaProject
             userLogin_textBox.Text = CurrentUser.Login;
             Patterns.Add(new VacationAppl(this));
             Patterns.Add(new TransferPattern(this));
-            AddPatternsToListBox();
+            Patterns.Add(new MoneyPattern(this));
+            Patterns.Add(new VacationAppl(this));
+            Patterns.Add(new TransferPattern(this));
+            Patterns.Add(new MoneyPattern(this)); AddPatternsToListBox();
             LoadHistory();
         }
 
@@ -111,8 +114,8 @@ namespace DiplomaProject
 
                 Button button = new Button();
                 button.Name = $"{pattern.FileName}";
-                button.Height = 195;
-                button.Width = 125;
+                button.Height = 500;
+                button.Width = 347;
                 button.Click += new RoutedEventHandler(iconButton_Click);
                 button.Content = image;
 
@@ -120,7 +123,7 @@ namespace DiplomaProject
                 textBlock.Name = $"{pattern.FileName}_textBox";
                 textBlock.Text = pattern.PatternName;
                 textBlock.Margin = new Thickness(5);
-                textBlock.FontSize = 14;
+                textBlock.FontSize = 16;
 
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.Name = $"{pattern.FileName}_stackPanel";
@@ -160,7 +163,8 @@ namespace DiplomaProject
                     using (var reader = new StreamReader(filestream))
                     {
                         VacationAppl vacation = new VacationAppl(this);
-                        TransferPattern transferPattern = new TransferPattern();
+                        TransferPattern transferPattern = new TransferPattern(this);
+                        MoneyPattern moneyPattern = new MoneyPattern(this);
                         string tmp;
                         while ((tmp = reader.ReadLine()) != null)
                         {
@@ -168,13 +172,17 @@ namespace DiplomaProject
 
                             switch (tmp)
                             {
-                                case "VacationApplication":
+                                case "VacationAppl":
                                     button.Name = vacation.FileName;
                                     button.Content = vacation.PatternName;
                                     break;
                                 case "TransferPattern":
                                     button.Name = transferPattern.FileName;
                                     button.Content = transferPattern.PatternName;
+                                    break;
+                                case "MoneyHelpPattern":
+                                    button.Name = moneyPattern.FileName;
+                                    button.Content = moneyPattern.PatternName;
                                     break;
                             }
 
