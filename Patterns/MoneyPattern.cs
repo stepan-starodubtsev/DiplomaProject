@@ -55,7 +55,7 @@ namespace DiplomaProject.Patterns
         public override Grid PlaceElements()
         {
             Grid grid = new Grid();
-            grid.Name = "transferPattern_grid";
+            grid.Name = "moneyHelpPattern_grid";
 
             #region SetRowsAndColls
             ColumnDefinition cd1 = new ColumnDefinition();
@@ -207,8 +207,8 @@ namespace DiplomaProject.Patterns
             Image patternImage = new Image();
             patternImage.Name = $"{FileName}_image";
             patternImage.Source = bitmap;
-            patternImage.Width = 400;
-            patternImage.Height = 800;
+            patternImage.Width = 300;
+            patternImage.Height = 600;
             patternImage.Margin = new Thickness(20, 10, 0, 10);
             Grid.SetColumn(patternImage, 2);
             Grid.SetRow(patternImage, 1);

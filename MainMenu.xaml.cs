@@ -40,9 +40,7 @@ namespace DiplomaProject
             Patterns.Add(new VacationAppl(this));
             Patterns.Add(new TransferPattern(this));
             Patterns.Add(new MoneyPattern(this));
-            Patterns.Add(new VacationAppl(this));
-            Patterns.Add(new TransferPattern(this));
-            Patterns.Add(new MoneyPattern(this)); AddPatternsToListBox();
+            AddPatternsToListBox();
             LoadHistory();
         }
 
